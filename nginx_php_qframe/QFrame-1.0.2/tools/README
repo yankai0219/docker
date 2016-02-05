@@ -1,0 +1,55 @@
+deploy-package.sh:
+  第一次部署的时候使用。从svn中获取所有代码，打包上传。
+  将代码传到 $REAL_REMOTE_DEPLOY_DIR 目录下
+  并建立 $REMOTE_DEPLOY_DIR -> $REAL_REMOTE_DEPLOY_DIR 的link
+  如果发现$REAL_REMOTE_DEPLOY_DIR 已经存在， 会提示是否继续部署。 选择n 会退出程序
+
+deploy-release.sh
+  ./deploy-release.sh file1 file2 dir1 dir2
+  原有的文件会被打包保存到    $ONLINE_BACKUP_DIR 目录下, 20111220122016-$PROJECT_NAME-bak.tgz (时间-project_name-bak.tgz)
+  新上传的文件会被打包保存到  $ONLINE_BACKUP_DIR 目录下, 20111220122016-290-gyz-test-up.tgz  (时间-svn版本号-project_name-up.tgz)
+
+deploy-beta.sh
+  project_home=deploy_tools_dir/..
+  从project_home目录下取文件更新到线上。 当deploy_tools目录不在源码目录中，运行会有问题
+
+autorun:
+  修改deploy-release.sh 在结尾处添加
+  ssh_run $host "echo test ok!"
+  check_succ $? "运行远程程序失败, 是否继续"
+  当代码提交完成后， 会ssh到服务器上执行 "echo test ok!"， 可以用自己的脚本替代(单元测试等)
+  如果该脚本运行错误， 返回非0值， 则会提示询问是否继续。 
+
+
+  sudo_ssh_run 会用当前用户名ssh到服务器上， 然后提示输入sudo_password, 使用sudo权限来运行cmd命令
+  
+
+  
+   
+deploy-revert.sh
+
+ 回滚只能替换代码。  如果一次更新是新增文件，则回滚不会删除该文件
+ 当一次代码提交只增加了文件， 在freebsd下回滚会导致是被。 freebsd tar zcvf a.tgz non_exist_file 后， 解压会失败
+ 用于回滚上一次的更新代码操作
+ ./deploy-revert.sh ls 会列出最近更新代码的历史。 每一次更新会有一个 tgz的文件名 (历史保存在本地，用那台机器更新代码，就在哪台机器上运行revert命令
+ ./deploy-revert.sh /home/sync360/deploy_history/gyz-test/20111220140953-gyz-test-bak.tgz 会将这个文件解压，并覆盖线上代码。 当提交代码到部分机器上后，可以使用这个命令回滚
+
+
+diff-one.sh:
+  ./diff-one.sh svn hostname 比较svn中的代码与某个指定host的代码有哪些不同
+  ./diff-one.sh host1 host2  比较host1和host2的代码有哪些不同
+diff-all.sh:
+  ./diff-all.sh svn          列出所有host(online_cluster)与svn中的代码有哪些不同
+  ./diff-all.sh host1        列出所有host(online_cluster)与host1的代码有哪些不同
+
+
+all-exec.sh
+  ./all-exec.sh "echo a" 在所有online_cluster上运行 "echo a"
+scp-to-all
+  ./scp-to-all.sh file_to_scp remote_pos
+  ./scp-to-all.sh a /home/sync360/ 将本地的a文件复制到所有机器的/home/sync360/目录下。 由于ssh使用sync360账号登陆，所以需要对目录有写权限
+  ./scp-to-all.sh a /home/sync360/b 将本地的a文件复制为所有机器的/home/sync360/b 由于ssh使用sync360账号登陆，所以需要对目录有写权限
+
+scp-from-all
+  ./scp-from-all.sh remote_file_name local_dir  将线上服务器的某个文件下载到本地的某个目录下。 文件名会加上host的名字
+  ./scp-from-all.sh /home/q/system/gyz-test/src/service/qds_svc.php tmp 会在tmp目录下建立两个文件 host1-qds_svc.php host2-qds_svc.php 需要对tmp目录有写权限
