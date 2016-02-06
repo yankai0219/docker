@@ -1,0 +1,29 @@
+# "ported" by Adam Miller <maxamillion@fedoraproject.org> from
+#   https://github.com/fedora-cloud/Fedora-Dockerfiles
+#
+# Originally written for Fedora-Dockerfiles by
+#   scollier <scollier@redhat.com>
+
+FROM yk/centos_base
+MAINTAINER yankai-c <yankai-c@360.cn>
+
+## basic enviroment
+RUN groupadd www; \
+    useradd -s /sbin/nologin -g www www;
+RUN yum -y install automake pcre pcre-devel 
+
+## install nginx
+RUN wget http://nginx.org/download/nginx-1.6.3.tar.gz -O /tmp/nginx-1.6.3.tar.gz; \
+    tar zxvf /tmp/nginx-1.6.3.tar.gz -C /tmp/;  \
+    cd /tmp/nginx-1.6.3; \
+    ./configure --user=www --group=www --prefix=/usr/local/nginx --with-http_ssl_module --with-http_stub_status_module; \
+    make && make install
+RUN mkdir /usr/local/nginx/conf/include
+RUN echo "daemon off;" >> /usr/local/nginx/conf/nginx.conf
+COPY init.d/init.d.nginx /etc/init.d/nginx
+RUN chmod +x /etc/init.d/nginx
+RUN echo "nginx on CentOS 6 inside Docker" > /usr/local/nginx/html/index.html
+
+## start nginx when it runs
+EXPOSE 80
+CMD /etc/init.d/nginx start 

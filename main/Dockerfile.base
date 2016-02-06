@@ -1,0 +1,14 @@
+# "ported" by Adam Miller <maxamillion@fedoraproject.org> from
+#   https://github.com/fedora-cloud/Fedora-Dockerfiles
+#
+# Originally written for Fedora-Dockerfiles by
+#   scollier <scollier@redhat.com>
+
+#FROM centos/centos6
+FROM keything/centos6
+MAINTAINER The CentOS Project <cloud-ops@centos.org>
+
+RUN yum -y update; yum clean all
+RUN yum -y install epel-release; yum clean all
+RUN for packages in make cmake gcc gcc-c++ gcc-g77 flex bison file libtool libtool-libs autoconf kernel-devel patch wget libjpeg libjpeg-devel libpng libpng-devel libpng10 libpng10-devel gd gd-devel libxml2 libxml2-devel zlib zlib-devel glib2 glib2-devel unzip tar bzip2 bzip2-devel libevent libevent-devel ncurses ncurses-devel curl curl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel libidn libidn-devel openssl openssl-devel vim-minimal gettext gettext-devel ncurses-devel gmp-devel pspell-devel unzip libcap diffutils net-tools libc-client-devel psmisc libXpm-devel git-core c-ares-devel; \
+    do yum -y install $packages; done
