@@ -1,1 +1,1 @@
-Dockerfile.nginx
+Dockerfile.php
