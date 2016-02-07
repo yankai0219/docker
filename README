@@ -19,9 +19,14 @@
 8. 将某个container保存为images
     docker commit container_id image_name
 9. 绑定数据卷Mount a volume on the container
-    docker run -d -p 8089:80 -v /Users/yankai/Documents/markdown/study/docker/docker/study/www:/usr/share/nginx/html  nginx_php
-    docker run -d -P -v $HOME/site:/usr/share/nginx/html --name mysite nginx
-   在$HOME/site中写入index.html那么就可以使用了。
+   docker run -d -P --name cb -v /Users/yankai/Documents/markdown/study/docker/volume/:/tmp/ yk/centos_base sh /tmp/dead_while.sh
+   其中volume目录下有个dead_while.sh文件，文件内容如下：
+   #!/bin/sh
+   while true;do
+    echo "hello"
+   done
+
+   特别注意：如果是在Mac或Windows上使用，那么你的docker daemon只允许你到达你的OSX/Windows文件系统。也就是Docker Machine 尝试自动分享你的/Users(OSX)或C:\Users(windows)目录，因此你要使用/Users/<path>:/<container path> .. (OSX) or /c/Users/<path>:<container path .. 
 10. 查看container的标准输出
    docker logs container_name
    docker logs -f container_name 类似tail -f
