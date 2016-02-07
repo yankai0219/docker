@@ -22,6 +22,23 @@
     docker run -d -p 8089:80 -v /Users/yankai/Documents/markdown/study/docker/docker/study/www:/usr/share/nginx/html  nginx_php
     docker run -d -P -v $HOME/site:/usr/share/nginx/html --name mysite nginx
    在$HOME/site中写入index.html那么就可以使用了。
+10. 查看container的标准输出
+   docker logs container_name
+   docker logs -f container_name 类似tail -f
+11. 查看container内部进程
+   docker top container_name
+12. 查找某个Images
+   docker search sinatra
+   docker pull training/sinatra
+   docker run -it training/sinatra
+13. 设置一个Image的tags
+   docker tag image_id image_name
+14. 将一个Image上推到docker hub
+   docker push docker_images
+15. 删除一个Image
+   docker rmi image_name[image_id]
+16. 将一个container变为Image
+   docker commit -m "modify message" -a "name" image_id new_image_name
 
 ## 如何使用
 1. Dockfile.base
