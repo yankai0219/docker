@@ -1,0 +1,58 @@
+## Docker 基本操作
+0. docker所有命令都需要root权限，因此通过这个加入到root组，之后所有的都不需要sudo前缀了。 
+    sudo usermod -a -G root yankai
+1. 根据Dockerfile构造Images
+    docker build -f xxx.Dockerfile.xx -t image_name . 
+2. 根据已经构造的Images建立container
+    docker run -d -p 8090:80 --name instance_name img_name 
+3. 查看docker中进程情况
+    docker ps -a
+4. 进入已经开启的container内部（不提倡）
+    docker exec -it instance_name bash
+5. 查看container的端口
+    docker port instance_name
+6. 开启和关闭某个container
+    docker start web
+    docker stop web
+7. 查看某个container的情况
+    docker inspect instance_name
+8. 将某个container保存为images
+    docker commit container_id image_name
+9. 绑定数据卷Mount a volume on the container
+    docker run -d -p 8089:80 -v /Users/yankai/Documents/markdown/study/docker/docker/study/www:/usr/share/nginx/html  nginx_php
+    docker run -d -P -v $HOME/site:/usr/share/nginx/html --name mysite nginx
+   在$HOME/site中写入index.html那么就可以使用了。
+
+## 如何使用
+1. Dockfile.base
+    
+    基础：centos:centos
+    目的：构造基础Centos环境
+    命令：docker build -f Dockfile.base -t yk/centos_base . 
+
+2. Dockfile.nginx
+    
+    基础：Dockfile.base
+    目的：构造基础的Nginx的环境，进行Nginx配置。
+    命令：docker build -f Dockfile.nginx -t yk/centos_nginx . 
+    说明：本Nginx环境的nginx.conf只有一个用于测试的server。其他所有虚拟主机的server都要放在conf/include/目录中
+    测试：curl localhost:8090 如果显示 nginx on CentOS 6 inside Docker 表示安装成功
+
+3. Dockerfile.php
+
+    基础：Dockefile.nginx
+    目的：基于Nginx环境，构造基础的PHP7.0环境，进行相关PHP配置
+    命令：docker build -f Dockfile.php -t yk/centos_php . 
+    说明：本PHP环境进行配置
+
+4. Dockerfile.nginx_php 
+
+    基础：Dockerfile.php
+    目的：基于PHP环境，构造一个如何使用前述的Images进行测试和开发的用例
+    命令：docker build -f Dockfile.nginx_php -t yk/centos_nginx_php . 
+    说明：构造测试环境，需要指定特定的nginx配置文件和特定的根目录
+
+    基础：Dockefile.php
+    目的：基于Nginx环境，构造基础的PHP7.0环境，进行相关PHP配置
+    命令：docker build -f Dockfile.php -t yk/centos_php . 
+    说明：本PHP环境进行配置
