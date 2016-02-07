@@ -1,0 +1,16 @@
+# Maintainer By yankai-c <yankai-c@360.cn> from
+#  https://github.com/yankai0219/docker.git
+#
+
+FROM yk/centos_php
+MAINTAINER yankai-c <yankai-c@360.cn>
+
+## basic enviroment
+COPY essential/nginx_for_php.demo.conf /usr/local/nginx/conf/include/
+COPY essential/docker.nginx_for_php.demo.sh /tmp/docker.nginx_for_php.demo.sh
+
+## start when it runs
+EXPOSE 80 
+RUN chmod a+x /tmp/docker.php.start.sh
+RUN chmod +x /tmp/docker.nginx_for_php.demo.sh
+CMD /tmp/docker.nginx_for_php.demo.sh

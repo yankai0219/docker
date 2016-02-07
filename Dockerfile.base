@@ -1,12 +1,8 @@
-# "ported" by Adam Miller <maxamillion@fedoraproject.org> from
-#   https://github.com/fedora-cloud/Fedora-Dockerfiles
+# Maintainer By yankai-c <yankai-c@360.cn> from
+#  https://github.com/yankai0219/docker.git
 #
-# Originally written for Fedora-Dockerfiles by
-#   scollier <scollier@redhat.com>
-
-#FROM centos/centos6
-FROM keything/centos6
-MAINTAINER The CentOS Project <cloud-ops@centos.org>
+FROM centos:centos6
+MAINTAINER yankai-c <yankai-c@360.cn>
 
 RUN yum -y update; yum clean all
 RUN yum -y install epel-release; yum clean all

@@ -1,8 +1,6 @@
-# "ported" by Adam Miller <maxamillion@fedoraproject.org> from
-#   https://github.com/fedora-cloud/Fedora-Dockerfiles
+# Maintainer By yankai-c <yankai-c@360.cn> from
+#  https://github.com/yankai0219/docker.git
 #
-# Originally written for Fedora-Dockerfiles by
-#   scollier <scollier@redhat.com>
 
 FROM yk/centos_base
 MAINTAINER yankai-c <yankai-c@360.cn>
@@ -18,12 +16,18 @@ RUN wget http://nginx.org/download/nginx-1.6.3.tar.gz -O /tmp/nginx-1.6.3.tar.gz
     cd /tmp/nginx-1.6.3; \
     ./configure --user=www --group=www --prefix=/usr/local/nginx --with-http_ssl_module --with-http_stub_status_module; \
     make && make install
+
+## configure nginx
 RUN mkdir /usr/local/nginx/conf/include
-RUN echo "daemon off;" >> /usr/local/nginx/conf/nginx.conf
+RUN echo "daemon off;" >> /usr/local/nginx/conf/nginx.conf # 可以去掉
 COPY init.d/init.d.nginx /etc/init.d/nginx
+COPY essential/nginx.conf /usr/local/nginx/conf/nginx.conf
 RUN chmod +x /etc/init.d/nginx
 RUN echo "nginx on CentOS 6 inside Docker" > /usr/local/nginx/html/index.html
 
 ## start nginx when it runs
 EXPOSE 80
-CMD /etc/init.d/nginx start 
+#CMD /etc/init.d/nginx start 
+COPY essential/docker.nginx.start.sh /tmp/docker.nginx.start.sh 
+RUN chmod a+x /tmp/docker.nginx.start.sh
+CMD /tmp/docker.nginx.start.sh
