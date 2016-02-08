@@ -77,4 +77,12 @@
     生成container命令：docker run -d -p 8091:80 --name cnp yk/centos_nginx_php
     测试：curl -H"Host: yankai.demo.test.cn" "http://localhost:8091" 如果显示hello world则表示正常
 
+5. Dockerfile.project_demo
+    基础：Dockerfile.php
+    目的：基于PHP环境，构造一个基本的PHP环境。在该PHP环境中，我们将网站的根目录挂载到container中，日志也记录到该网站的根目录中，那么我们就可以基于Container的环境，进行开发
+    命令：docker build -t yk/centos_project_demo -f Dockerfile.project_demo . 
+    生成container：docker run -d -p 8093:80 -v docker/volume/demo_php:/home/yankai/demo_php yk/centos_project_demo
+    测试：curl -H"Host: yk.test.cn" "http://localhost:8093"
+    显示：{"errno":0,"errormsg":{"method":"make","value":"test.make","new":"test.make"}}
+    并在demo_php/logs目录下面是有日志的
 

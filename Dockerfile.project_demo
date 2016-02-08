@@ -1,0 +1,14 @@
+# Maintainer By yankai-c <yankai-c@360.cn> from
+#  https://github.com/yankai0219/docker.git
+#
+
+FROM yk/centos_php
+MAINTAINER yankai-c <yankai-c@360.cn>
+
+## basic enviroment
+COPY essential/docker.project_demo.sh /tmp/docker.project_demo.sh
+
+## start when it runs
+EXPOSE 80 
+RUN chmod +x /tmp/docker.project_demo.sh
+CMD /tmp/docker.project_demo.sh
