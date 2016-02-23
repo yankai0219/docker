@@ -1,2 +1,5 @@
 Dockerfile
 cloudappsvc
+access.log
+yk_process.log
+*\.swp
